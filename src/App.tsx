@@ -1,25 +1,38 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+//Modules
+import React, { useCallback, useState } from 'react';
 
-function App() {
+//Components
+import InputMask from './components/InputMask';
+//Styles
+import { Container } from './styles.js'
+//
+interface Usuario {
+  cep: string;
+  fone: string;
+  cnpj: string;
+  cpf: string;
+  price: string;
+}
+
+const App: React.FC = () => {
+  const [usuario, setUsuario] = useState<Usuario>({} as Usuario);
+  const handleChange = useCallback((e: React.FormEvent<HTMLInputElement>) => {
+    setUsuario({
+      ...usuario,
+      [e.currentTarget.name]: e.currentTarget.value.replace(/\D/g, ''),
+    }
+    )
+  }, [usuario])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Container>
+      <InputMask name='fone' mask='fone' label='Fone' onChange={handleChange} />
+      <InputMask name='cnpj' mask='cnpj' label='CNPJ' onChange={handleChange} />
+      <InputMask name='cpf' mask='cpf' label='CPF' onChange={handleChange} />
+      <InputMask name='cep' mask='cep' label='CEP' onChange={handleChange} />
+      <InputMask name='price' mask='currency' label='R$' onChange={handleChange} />
+      <button onClick={() => { console.log(usuario) }}></button>
+    </Container>
   );
 }
 
